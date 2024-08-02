@@ -1,21 +1,30 @@
 <script setup lang="ts">
+import { login } from '@/api/login'
+import { useMemberStore } from '@/stores'
 import { ref } from 'vue'
+
+const user = useMemberStore()
 const form = ref({
   username: '',
   password: '',
 })
-const toLogin = () => {}
+const toLogin = async () => {
+  const res = await login(form.value)
+  user.setProfile(res.data)
+  uni.switchTab({
+    url: '/pages/index/index',
+  })
+}
 </script>
 
 <template>
   <view class="login">
-    <view>注册</view>
     <view class="row_logo">
       <image src="@/static/images/logo.png" class="logo" mode="scaleToFill" />
     </view>
     <view class="login_form">
       <view class="login_text">登录</view>
-      <view>您好,欢迎来到遇聊!</view>
+      <view>您好,欢迎来到智慧体育系统!</view>
       <input v-model="form.username" placeholder="用户名/邮箱" class="input_border" />
       <input v-model="form.password" placeholder="密码" class="input_border" />
     </view>

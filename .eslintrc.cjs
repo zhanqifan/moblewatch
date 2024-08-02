@@ -26,6 +26,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  ignorePatterns: ['src/component/qiun-data-charts/'],
   rules: {
     'prettier/prettier': [
       'warn',

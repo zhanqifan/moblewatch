@@ -1,8 +1,10 @@
+import { useMemberStore } from '@/stores'
 /* eslint-disable */
-const baseURL = 'http://git.yukexx.com:2281/'
+const baseURL = 'http://git.yukexx.com:2281'
 const httpInterceptor = {
     // 拦截前触发
     invoke(options: UniApp.RequestOptions) {
+      let method = options.method;
         // 1. 非 http 开头需拼接地址
         if (!options.url.startsWith('http')) {
             options.url = baseURL + options.url
@@ -10,16 +12,25 @@ const httpInterceptor = {
         // 2. 请求超时
         options.timeout = 10000
         // 3. 添加小程序端请求头标识
+        if(method==='POST'||method==='PUT'){
+         // FormData数据去请求头Content-Type
+        if (options.data instanceof FormData) {
+        delete options.header['Content-Type'];
+       }
+       }else{
         options.header = {
-            'Content-Type': 'application/json',
-            ...options.header,//如有自定义请求头可覆盖
+          'Content-Type': 'application/json',
+          ...options.header,//如有自定义请求头可覆盖
         }
+        }
+
         // 4. 添加 token 请求头标识
-        // const memberStore = useMemberStore()
-        // const token = memberStore.profile?.token
-        // if (token) {
-        //     options.header.Authorization = token
-        // }
+        const memberStore = useMemberStore()
+        const token = memberStore.profile?.access_token
+        if (token) {
+            options.header.Authorization ='Bearer '+ token
+            options.header.Clientid='e5cd7e4891bf95d1d19206ce24a7b32e'
+        }
     },
 }
 
@@ -31,7 +42,7 @@ uni.addInterceptor('request', httpInterceptor)
 interface Data<T> {
     type: number,//响应状态码
     msg: string,//响应成功
-    dataList: T//接口的这一项返回类型不确定 所以用泛型定义
+    data: T//接口的这一项返回类型不确定 所以用泛型定义
 }
 // 响应拦截器
 export const request = <T>(option: UniApp.RequestOptions) => {
