@@ -1,6 +1,7 @@
 import { useMemberStore } from '@/stores'
 /* eslint-disable */
-const baseURL = 'http://git.yukexx.com:2281'
+const baseURL = import.meta.env.VITE_APP_BASE_URL
+
 const httpInterceptor = {
     // 拦截前触发
     invoke(options: UniApp.RequestOptions) {
@@ -11,7 +12,7 @@ const httpInterceptor = {
         }
         // 2. 请求超时
         options.timeout = 10000
-        // 3. 添加小程序端请求头标识
+
         if(method==='POST'||method==='PUT'){
          // FormData数据去请求头Content-Type
         if (options.data instanceof FormData) {
@@ -40,7 +41,7 @@ uni.addInterceptor('request', httpInterceptor)
 // uni.addInterceptor('uploadFile', httpInterceptor)
 
 interface Data<T> {
-    type: number,//响应状态码
+    code: number,//响应状态码
     msg: string,//响应成功
     data: T//接口的这一项返回类型不确定 所以用泛型定义
 }
@@ -51,14 +52,16 @@ export const request = <T>(option: UniApp.RequestOptions) => {
             ...option,
             // 请求成功
             success(result) {
-                if (result.statusCode >= 200 && result.statusCode < 300) {
+              const data= result.data as Data<T>;
+              const code = data.code
+                if (code >= 200 && code < 300) {
                     resolve(result.data as Data<T>)
-                } else if (result.statusCode === 401) {//401无token
-                    // const Member = useMemberStore()
-                    // Member.clearProfile()
-                    // uni.navigateTo({
-                    //     url: '/pages/login/login'
-                    // })
+                } else if (code === 401) {//401无token
+                    const Member = useMemberStore()
+                    Member.clearProfile()
+                    uni.navigateTo({
+                        url: '/pages/login/login'
+                    })
                     reject(result)
                     uni.showToast({
                         title: '请求错误',
@@ -68,7 +71,7 @@ export const request = <T>(option: UniApp.RequestOptions) => {
                 }
                 else {
                     uni.showToast({
-                        title: (result.data as Data<T>).msg || '请求错误',
+                        title: data.msg || '请求错误',
                         icon: 'none',
                         mask: true
                     })

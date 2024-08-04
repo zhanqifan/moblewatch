@@ -3,18 +3,33 @@ import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { onMounted } from 'vue'
 import { getChildHearts } from '@/api/heart'
+import { useMemberStore } from '@/stores'
 import LineCharts from './components/LineCharts.vue'
+import type { HeartData } from '@/types/home'
 import BarCharts from './components/BarCHarts.vue'
 const time = ref({
   day: '日',
   month: '月',
   year: '年',
 })
+const heartObject = ref<HeartData>()
+// const datetimerange = ref([])
 const date = ref(dayjs().format('MM月DD日'))
-const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent) => {
+const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
   console.log(e)
+
   date.value = e.detail.value
 }
+
+const getHeartRange = async () => {
+  const res = await getChildHearts()
+  heartObject.value = res.data
+}
+onMounted(async () => {
+  const member = useMemberStore()
+  console.log(member)
+  getHeartRange()
+})
 </script>
 
 <template>
@@ -22,19 +37,19 @@ const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent) => {
     <!-- 年月日 -->
     <view class="list_group">
       <view class="data_btn">
-        <picker mode="date" :value="date" fields="day" @change="bindDateChange">
+        <picker mode="date" :value="date" fields="day" @change="(e) => bindDateChange(e, 'day')">
           <view class="uni-input">{{ time.day }}</view>
         </picker>
       </view>
       <view class="line"> | </view>
       <view class="data_btn">
-        <picker mode="date" fields="month" :value="date" @change="bindDateChange">
+        <picker mode="date" fields="day" :value="date" @change="(e) => bindDateChange(e, 'month')">
           <view class="uni-input">{{ time.month }}</view>
         </picker>
       </view>
       <view class="line">|</view>
       <view class="data_btn">
-        <picker mode="date" fields="year" :value="date" @change="bindDateChange">
+        <picker mode="date" fields="month" :value="date" @change="(e) => bindDateChange(e, 'year')">
           <view class="uni-input">{{ time.year }}</view>
         </picker>
       </view>
@@ -43,18 +58,22 @@ const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent) => {
     <view class="date_title">
       {{ date }}
     </view>
+    <!-- <view class="example-body">
+      <uni-datetime-picker v-model="datetimerange" type="datetimerange" rangeSeparator="至" />
+    </view>
+    <uni-section :title="'时间:' + datetimerange[0]" type="line"></uni-section> -->
     <view class="heart_row">
       <view class="row_block">
         <view>心率范围(次/分)</view>
-        <view class="rate">51-117</view>
+        <view class="rate">{{ heartObject?.minHeartRate }}-{{ heartObject?.maxHeartRate }}</view>
       </view>
       <view class="row_block">
         <view>平均心率(次/分)</view>
-        <view class="rate">76</view>
+        <view class="rate">{{ heartObject?.avgHeartRate.toFixed(2) }}</view>
       </view>
       <view class="row_block">
         <view>最高心率(次/分)</view>
-        <view class="rate">76</view>
+        <view class="rate">{{ heartObject?.minHeartRate }}</view>
       </view>
     </view>
     <view>

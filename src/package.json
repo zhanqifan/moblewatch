@@ -1,0 +1,17 @@
+{
+    "id": "jarvis-timePickerPopup",
+    "name": "时间范围弹窗选择器",
+    "displayName": "时间范围弹窗选择器",
+    "version": "1.0.0",
+    "description": "时间范围弹窗选择器：使用uni-popup+picker-view实现",
+    "keywords": [
+        "时间选择器",
+        "时间范围"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}
