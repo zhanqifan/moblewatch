@@ -7,6 +7,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { ref } from 'vue'
+import type { HeartMap } from '@/types/home.d.ts'
+import { formatSecondsToHMS } from '../utils/timeHour'
+import { exchangeHeart } from '../utils/sort'
+const props = defineProps<{
+  heartMap: HeartMap[]
+}>()
 const opts = ref({
   color: [
     '#1890FF',
@@ -49,29 +55,20 @@ const opts = ref({
 const chartData = ref()
 const getServerData = () => {
   //模拟从服务器获取数据时的延时
-  setTimeout(() => {
-    let res = {
-      categories: [
-        '放松身体',
-        '暖身激活',
-        '高校燃脂',
-        '心肺提升',
-        '强度冲击',
-        '极限突破',
-        '超越极限',
-        '绝对巅峰',
-      ],
-      series: [
-        {
-          name: '目标值',
-          data: [35, 36, 31, 33, 13, 34],
-        },
-      ],
-    }
-    chartData.value = JSON.parse(JSON.stringify(res))
-  }, 500)
+  let res = {
+    categories: props.heartMap.map((item) => exchangeHeart[item.grade]),
+    series: [
+      {
+        name: '时长',
+        data: props.heartMap.map((item) => item.time),
+      },
+    ],
+  }
+  chartData.value = res
 }
 onMounted(() => {
+  const test = props.heartMap.map((item) => formatSecondsToHMS(item.time))
+  console.log(test)
   getServerData()
 })
 </script>

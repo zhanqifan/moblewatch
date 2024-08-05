@@ -1,4 +1,4 @@
-import type { HeartCondition, HeartData, HeartParams } from '@/types/home'
+import type {  HeartData, HeartMap, HeartParams } from '@/types/home'
 import { request } from '@/utils/http'
 // 获取实时心率
 export const getChildHearts = (data: HeartParams) => {
@@ -12,9 +12,9 @@ export const getChildHearts = (data: HeartParams) => {
   })
 }
 // 获取心率分布
-export const getDistribution = (data: HeartCondition) => {
-  return request({
-    url: '/teacher/distribution',
+export const getDistribution = (data: HeartParams) => {
+  return request<HeartMap[]>({
+    url: '/parentInfo/distribution',
     method: 'GET',
     data,
     header: {

@@ -3,20 +3,19 @@ import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { onMounted } from 'vue'
 import { getChildHearts, getDistribution } from '@/api/heart'
-import { useMemberStore } from '@/stores'
 import LineCharts from './components/LineCharts.vue'
-import type { HeartData, HeartParams } from '@/types/home'
+import type { HeartData, HeartParams, HeartMap } from '@/types/home'
 import BarCharts from './components/BarCHarts.vue'
-
+import { customOrder, categorySort } from './utils/sort'
 const time = ref({
   day: '日',
   month: '月',
   year: '年',
 })
-const userMember = useMemberStore()
-const heartObject = ref<HeartData>()
+const heartObject = ref<HeartData>() //实时心率
+const heartMap = ref<HeartMap[]>() //心率分布
 const selectType = ref() //选择器选择
-const heartParams = ref<HeartParams>({ startTime: 1722643199, endTime: 1722729599 })
+const heartParams = ref<HeartParams>({ startTime: 1722816000, endTime: 1722902400 })
 const date = ref(dayjs().format('MM月DD日'))
 const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
   selectType.value = extraParam
@@ -27,16 +26,22 @@ const getHeartRange = async () => {
   const res = await getChildHearts(heartParams.value)
   res.data.realTimeHeartRate.forEach((item) => (item.time = dayjs(item.time).format('HH时')))
   heartObject.value = res.data
-  console.log(heartObject.value)
 }
 // 获取心率分布图
 const getHeartCondition = async () => {
-  const studentId = userMember.profile.userId
-  const res = await getDistribution({ studentId, ...heartParams.value })
+  const res = await getDistribution(heartParams.value)
+  customOrder.forEach((grade) => {
+    const found = res.data.some((item) => item.grade === grade)
+    if (!found) {
+      res.data.push({
+        grade,
+        time: 0,
+      })
+    }
+  })
+  heartMap.value = categorySort(res.data, 'grade', customOrder)
 }
 onMounted(async () => {
-  const member = useMemberStore()
-  console.log(member)
   getHeartRange()
   getHeartCondition()
 })
@@ -92,7 +97,7 @@ onMounted(async () => {
     <view>
       <view>心率分布</view>
       <view>
-        <BarCharts />
+        <BarCharts v-if="heartMap" :heartMap="heartMap" />
       </view>
     </view>
   </view>

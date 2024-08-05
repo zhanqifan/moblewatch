@@ -62,7 +62,6 @@ const getServerData = () => {
 }
 onMounted(() => {
   getServerData()
-  console.log(props.realHeart)
 })
 </script>
 

@@ -16,7 +16,9 @@ export interface RealTimeHeartRate {
   maxHeartRate: number
   minHeartRate: number
 }
-// 心率分布数据传参
-export interface HeartCondition extends HeartParams {
-  studentId: string
+
+// 心率分部图
+export interface HeartMap {
+  grade: 'LOW' | 'MIDDLE' | 'HIGH' | 'HIGHER' | 'HIGHEST' | 'HIGHEST_HIGHER';
+  time?: number;
 }
