@@ -28,6 +28,7 @@ const opts = ref({
     min: 0,
     axisLine: false,
     max: 40,
+    format: 'xxx',
   },
   yAxis: {},
   extra: {

@@ -32,7 +32,7 @@ const toLogin = async () => {
       loading.value = true
       const res = await login(formData.value)
       if (res.code === 200) {
-        user.setProfile(res.data)
+        user.setProfile({ access_token: res.data.access_token, client_id: res.data.client_id })
         loading.value = false
         uni.switchTab({
           url: '/pages/index/index',

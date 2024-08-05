@@ -2,33 +2,43 @@
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { onMounted } from 'vue'
-import { getChildHearts } from '@/api/heart'
+import { getChildHearts, getDistribution } from '@/api/heart'
 import { useMemberStore } from '@/stores'
 import LineCharts from './components/LineCharts.vue'
-import type { HeartData } from '@/types/home'
+import type { HeartData, HeartParams } from '@/types/home'
 import BarCharts from './components/BarCHarts.vue'
+
 const time = ref({
   day: '日',
   month: '月',
   year: '年',
 })
+const userMember = useMemberStore()
 const heartObject = ref<HeartData>()
-// const datetimerange = ref([])
+const selectType = ref() //选择器选择
+const heartParams = ref<HeartParams>({ startTime: 1722643199, endTime: 1722729599 })
 const date = ref(dayjs().format('MM月DD日'))
 const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
-  console.log(e)
-
+  selectType.value = extraParam
   date.value = e.detail.value
 }
-
+// 获取实时心率图
 const getHeartRange = async () => {
-  const res = await getChildHearts()
+  const res = await getChildHearts(heartParams.value)
+  res.data.realTimeHeartRate.forEach((item) => (item.time = dayjs(item.time).format('HH时')))
   heartObject.value = res.data
+  console.log(heartObject.value)
+}
+// 获取心率分布图
+const getHeartCondition = async () => {
+  const studentId = userMember.profile.userId
+  const res = await getDistribution({ studentId, ...heartParams.value })
 }
 onMounted(async () => {
   const member = useMemberStore()
   console.log(member)
   getHeartRange()
+  getHeartCondition()
 })
 </script>
 
@@ -77,7 +87,7 @@ onMounted(async () => {
       </view>
     </view>
     <view>
-      <LineCharts />
+      <LineCharts v-if="heartObject" :realHeart="heartObject?.realTimeHeartRate" />
     </view>
     <view>
       <view>心率分布</view>

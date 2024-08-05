@@ -8,9 +8,9 @@ export interface LoginData {
   source?: string
   code?: string
   uuid?: string
-  clientId?: string
-  grantType?: string
+  client_id?: string
 }
 export interface LoginResult {
   access_token: string
+  client_id: string
 }

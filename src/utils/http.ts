@@ -20,7 +20,7 @@ const httpInterceptor = {
        }
        }else{
         options.header = {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json;charset=utf-8',
           ...options.header,//如有自定义请求头可覆盖
         }
         }

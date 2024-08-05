@@ -7,6 +7,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { ref } from 'vue'
+import type { RealTimeHeartRate } from '@/types/home'
+const props = defineProps<{ realHeart: RealTimeHeartRate[] }>()
 const opts = ref({
   color: [
     '#1890FF',
@@ -42,25 +44,25 @@ const opts = ref({
 const chartData = ref()
 const getServerData = () => {
   //模拟从服务器获取数据时的延时
-  setTimeout(() => {
-    let res = {
-      categories: ['2016', '2017', '2018', '2019', '2020', '2021'],
-      series: [
-        {
-          name: '目标值',
-          data: [35, 36, 31, 33, 13, 34],
-        },
-        {
-          name: '完成量',
-          data: [18, 27, 21, 24, 6, 28],
-        },
-      ],
-    }
-    chartData.value = JSON.parse(JSON.stringify(res))
-  }, 500)
+
+  let res = {
+    categories: props.realHeart.map((item) => item.time),
+    series: [
+      {
+        name: '最大值',
+        data: props.realHeart.map((item) => item.maxHeartRate),
+      },
+      {
+        name: '最小值',
+        data: props.realHeart.map((item) => item.minHeartRate),
+      },
+    ],
+  }
+  chartData.value = res
 }
 onMounted(() => {
   getServerData()
+  console.log(props.realHeart)
 })
 </script>
 
