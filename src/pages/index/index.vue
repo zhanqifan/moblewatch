@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import dayjs from 'dayjs'
 import { onMounted } from 'vue'
 import { getChildHearts, getDistribution } from '@/api/heart'
@@ -7,26 +7,18 @@ import LineCharts from './components/LineCharts.vue'
 import type { HeartData, HeartParams, HeartMap } from '@/types/home'
 import BarCharts from './components/BarCHarts.vue'
 import { customOrder, categorySort } from './utils/sort'
-
+import { getWeekRange } from './utils/timeControl'
 const list = ref(['日', '周', '月'])
-const timeUnix = ref({
-  日: 864000,
-  周: 604800,
-})
+const currentExchange = ref(['day', 'week', 'month'])
+const current = ref<number>(1)
 const heartObject = ref<HeartData>() //实时心率
 const heartMap = ref<HeartMap[]>() //心率分布
 const heartParams = ref<HeartParams>({ startTime: 1722816000, endTime: 1722902400 })
-const date = ref(dayjs().format('MM月DD日'))
-// const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
-//   selectType.value = extraParam
-//   date.value = e.detail.value
-// }
-const getMonth = (time: Date | string, type: 'add' | 'sub') => {
-  if (type === 'add') {
-    dayjs('time').add(1, 'month')
-  } else {
-    dayjs('time').subtract(1, 'month')
-  }
+const date = ref(dayjs().unix())
+// 日期计算函数
+type unitType = 'day' | 'week' | 'month'
+const adjustDate = (type: 'add' | 'subtract', unit: unitType) => {
+  date.value = dayjs.unix(date.value)[type](1, unit).unix()
 }
 // 获取实时心率图
 const getHeartRange = async () => {
@@ -35,8 +27,6 @@ const getHeartRange = async () => {
   heartObject.value = res.data
 }
 
-const add = () => {}
-const reduce = () => {}
 // 获取心率分布图
 const getHeartCondition = async () => {
   const res = await getDistribution(heartParams.value)
@@ -51,6 +41,24 @@ const getHeartCondition = async () => {
   })
   heartMap.value = categorySort(res.data, 'grade', customOrder)
 }
+// 改变时间展示
+const computedMessage = computed(() => {
+  switch (current.value) {
+    case 0:
+      console.log(current.value)
+      return dayjs.unix(date.value).format('MM月DD日')
+    case 1: {
+      console.log(current.value)
+      const { currentWeek } = getWeekRange(dayjs.unix(date.value))
+      console.log('11')
+      return currentWeek.start + '至' + currentWeek.end
+    }
+    case 2:
+      return dayjs.unix(date.value).format('M月')
+    default:
+      return '请选择日期'
+  }
+})
 onMounted(() => {
   getHeartRange()
   getHeartCondition()
@@ -61,17 +69,29 @@ onMounted(() => {
   <view class="index">
     <!-- 分段器 -->
     <view class="top">
-      <up-subsection :list="list" :current="1"></up-subsection>
+      <up-subsection
+        :list="list"
+        :current="current"
+        @change="(e:number) => (current = e)"
+      ></up-subsection>
     </view>
 
     <view class="date_title">
-      <up-icon name="arrow-left" color="#909399" size="28" @click="reduce"></up-icon> {{ date }}
-      <up-icon name="arrow-right" color="#909399" size="28" @click="add"></up-icon>
+      <up-icon
+        name="arrow-left"
+        color="#909399"
+        size="28"
+        @click="adjustDate('subtract', currentExchange[current] as unitType)"
+      ></up-icon>
+      {{ computedMessage }}
+      <up-icon
+        name="arrow-right"
+        color="#909399"
+        size="28"
+        @click="adjustDate('add', currentExchange[current] as unitType)"
+      ></up-icon>
     </view>
-    <!-- <view class="example-body">
-      <uni-datetime-picker v-model="datetimerange" type="datetimerange" rangeSeparator="至" />
-    </view>
-    <uni-section :title="'时间:' + datetimerange[0]" type="line"></uni-section> -->
+
     <view class="heart_row">
       <view class="row_block">
         <view>心率范围(次/分)</view>
