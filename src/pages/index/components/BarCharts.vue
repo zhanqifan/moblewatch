@@ -31,10 +31,7 @@ const opts = ref({
   xAxis: {
     boundaryGap: 'justify',
     disableGrid: false,
-    min: 0,
     axisLine: false,
-    max: 40,
-    format: 'xxx',
   },
   yAxis: {},
   extra: {
@@ -61,6 +58,7 @@ const getServerData = () => {
       {
         name: '时长',
         data: props.heartMap.map((item) => item.time),
+        format: 'yAxisFormatTime',
       },
     ],
   }
@@ -68,7 +66,6 @@ const getServerData = () => {
 }
 onMounted(() => {
   const test = props.heartMap.map((item) => formatSecondsToHMS(item.time))
-  console.log(test)
   getServerData()
 })
 </script>

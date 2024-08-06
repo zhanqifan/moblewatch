@@ -17,6 +17,7 @@
  */
 
 // 主题颜色配置：如每个图表类型需要不同主题，请在对应图表类型上更改color属性
+import { formatSecondsToHMS } from '@/pages/index/utils/timeHour'
 const color = [
   '#1890FF',
   '#91CB74',
@@ -127,6 +128,9 @@ const cfu = {
   option: {},
   //下面是自定义format配置，因除H5端外的其他端无法通过props传递函数，只能通过此属性对应下标的方式来替换
   formatter: {
+    yAxisFormatTime: function (val, categories, index, opts) {
+      return formatSecondsToHMS(val)
+    },
     yAxisDemo1: function (val, index, opts) {
       return val + '元'
     },

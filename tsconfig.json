@@ -5,10 +5,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@vant/weapp/*": ["path/to/node_modules/@vant/weapp/dist/*"]
     },
     "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types"]
+    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types","uview-plus/types"]
   },
 
   "vueCompilerOptions": {

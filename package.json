@@ -1,5 +1,5 @@
 {
-  "name": "智慧体育",
+  "name": "smart-build",
   "version": "0.0.0",
   "scripts": {
     "dev:app": "uni -p app",
@@ -54,11 +54,13 @@
     "@dcloudio/uni-mp-xhs": "3.0.0-alpha-3081220230802001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3081220230802001",
     "@dcloudio/uni-ui": "^1.5.6",
+    "clipboard": "^2.0.11",
     "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
     "pinia": "2.0.27",
     "pinia-plugin-persistedstate": "^3.2.0",
     "unplugin-auto-import": "^0.18.2",
+    "uview-plus": "^3.3.12",
     "vue": "^3.2.47",
     "vue-i18n": "^9.2.2"
   },
@@ -80,10 +82,14 @@
     "eslint": "^8.22.0",
     "eslint-plugin-vue": "^9.3.0",
     "miniprogram-api-typings": "^3.12.0",
-    "sass": "^1.56.1",
-    "sass-loader": "^10.1.1",
+    "sass": "^1.77.8",
+    "sass-loader": "^10.5.2",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
     "vue-tsc": "^1.8.8"
-  }
+  },
+  "description": "小兔鲜儿项目包含从首页浏览商品，商品详情，微信登录，加入购物车，提交订单，微信支付，订单管理等功能。",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }

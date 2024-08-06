@@ -1,13 +1,13 @@
 import type { HeartMap } from '@/types/home'
-export const customOrder = ['LOW', 'MIDDLE', 'HIGH', 'HIGHER', 'HIGHEST', 'HIGHEST_HIGHER'] //排序规则
+export const customOrder = ['LOW', 'MIDDLE', 'HIGH', 'HIGHER', 'HIGHEST'] //排序规则
 // 转换字典
 export const exchangeHeart = {
-  LOW: '放松身体',
-  MIDDLE: '暖身激活',
-  HIGH: '高效燃脂',
-  HIGHER: '心肺提升',
-  HIGHEST: '强度冲击',
-  HIGHEST_HIGHER: '极限突破',
+  LOW: '<86次/分',
+  MIDDLE: '87-113次/分',
+  HIGH: '114-142次/分',
+  HIGHER: '160-170次/分',
+  HIGHEST: '≥171次/分',
+  // HIGHEST_HIGHER: '极限突破',
 }
 type key = 'grade' | 'time'
 type CustomOrderType = (typeof customOrder)[number]

@@ -5620,15 +5620,7 @@ function drawXAxis(categories, opts, config, context) {
     context.beginPath()
     context.setFontSize(opts.xAxis.titleFontSize * opts.pix)
     context.setFillStyle(opts.xAxis.titleFontColor)
-    context.fillText(
-      String(opts.xAxis.title),
-      opts.width - opts.area[1] + opts.xAxis.titleOffsetX * opts.pix,
-      opts.height -
-        opts.area[2] +
-        opts.xAxis.marginTop * opts.pix +
-        ((opts.xAxis.lineHeight - opts.xAxis.titleFontSize) * opts.pix) / 2 +
-        (opts.xAxis.titleFontSize + opts.xAxis.titleOffsetY) * opts.pix,
-    )
+
     context.closePath()
     context.stroke()
   }

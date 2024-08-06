@@ -7,19 +7,26 @@ import LineCharts from './components/LineCharts.vue'
 import type { HeartData, HeartParams, HeartMap } from '@/types/home'
 import BarCharts from './components/BarCHarts.vue'
 import { customOrder, categorySort } from './utils/sort'
-const time = ref({
-  day: '日',
-  month: '月',
-  year: '年',
+
+const list = ref(['日', '周', '月'])
+const timeUnix = ref({
+  日: 864000,
+  周: 604800,
 })
 const heartObject = ref<HeartData>() //实时心率
 const heartMap = ref<HeartMap[]>() //心率分布
-const selectType = ref() //选择器选择
 const heartParams = ref<HeartParams>({ startTime: 1722816000, endTime: 1722902400 })
 const date = ref(dayjs().format('MM月DD日'))
-const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
-  selectType.value = extraParam
-  date.value = e.detail.value
+// const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
+//   selectType.value = extraParam
+//   date.value = e.detail.value
+// }
+const getMonth = (time: Date | string, type: 'add' | 'sub') => {
+  if (type === 'add') {
+    dayjs('time').add(1, 'month')
+  } else {
+    dayjs('time').subtract(1, 'month')
+  }
 }
 // 获取实时心率图
 const getHeartRange = async () => {
@@ -27,6 +34,9 @@ const getHeartRange = async () => {
   res.data.realTimeHeartRate.forEach((item) => (item.time = dayjs(item.time).format('HH时')))
   heartObject.value = res.data
 }
+
+const add = () => {}
+const reduce = () => {}
 // 获取心率分布图
 const getHeartCondition = async () => {
   const res = await getDistribution(heartParams.value)
@@ -41,7 +51,7 @@ const getHeartCondition = async () => {
   })
   heartMap.value = categorySort(res.data, 'grade', customOrder)
 }
-onMounted(async () => {
+onMounted(() => {
   getHeartRange()
   getHeartCondition()
 })
@@ -49,29 +59,14 @@ onMounted(async () => {
 
 <template>
   <view class="index">
-    <!-- 年月日 -->
-    <view class="list_group">
-      <view class="data_btn">
-        <picker mode="date" :value="date" fields="day" @change="(e) => bindDateChange(e, 'day')">
-          <view class="uni-input">{{ time.day }}</view>
-        </picker>
-      </view>
-      <view class="line"> | </view>
-      <view class="data_btn">
-        <picker mode="date" fields="day" :value="date" @change="(e) => bindDateChange(e, 'month')">
-          <view class="uni-input">{{ time.month }}</view>
-        </picker>
-      </view>
-      <view class="line">|</view>
-      <view class="data_btn">
-        <picker mode="date" fields="month" :value="date" @change="(e) => bindDateChange(e, 'year')">
-          <view class="uni-input">{{ time.year }}</view>
-        </picker>
-      </view>
+    <!-- 分段器 -->
+    <view class="top">
+      <up-subsection :list="list" :current="1"></up-subsection>
     </view>
-    <!-- 显示日期 -->
+
     <view class="date_title">
-      {{ date }}
+      <up-icon name="arrow-left" color="#909399" size="28" @click="reduce"></up-icon> {{ date }}
+      <up-icon name="arrow-right" color="#909399" size="28" @click="add"></up-icon>
     </view>
     <!-- <view class="example-body">
       <uni-datetime-picker v-model="datetimerange" type="datetimerange" rangeSeparator="至" />
@@ -91,7 +86,8 @@ onMounted(async () => {
         <view class="rate">{{ heartObject?.minHeartRate }}</view>
       </view>
     </view>
-    <view>
+    <view style="margin-top: 20rpx">
+      <view style="font-size: 20rpx; color: gray; margin-left: 30rpx">实时心率(次/分)</view>
       <LineCharts v-if="heartObject" :realHeart="heartObject?.realTimeHeartRate" />
     </view>
     <view>
@@ -107,14 +103,8 @@ onMounted(async () => {
 .index {
   margin: 0 60rpx;
 
-  .list_group {
-    background-color: #eeeeef;
-    height: 80rpx;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 20rpx;
-    border-radius: 15rpx;
+  .top {
+    margin-top: 30rpx;
   }
   .data_btn {
     width: 70%;
@@ -134,6 +124,8 @@ onMounted(async () => {
   }
   .date_title {
     margin: 30rpx;
+    display: flex;
+    justify-content: space-between;
     text-align: center;
     font-size: 40rpx;
     font-weight: 500;
