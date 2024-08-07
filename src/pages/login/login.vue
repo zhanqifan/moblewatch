@@ -17,7 +17,7 @@ const rules = ref({
       min: 5,
       max: 10,
       message: '用户密码长度必须在5到20个字符之间',
-      trigger: ['change'],
+      trigger: ['blur'],
     },
   ],
 })
@@ -26,40 +26,26 @@ const toLogin = async () => {
   form.value.validate().then(async (valid: boolean) => {
     if (valid) {
       loading.value = true
-      const res = await login(formLogin.value)
-      if (res.code === 200) {
-        user.setProfile({ access_token: res.data.access_token, client_id: res.data.client_id })
-        loading.value = false
-        uni.reLaunch({
-          url: '/pages/index/index',
-        })
-      } else {
-        uni.showToast({
-          title: res.msg,
-          duration: 2000,
-        })
+      try {
+        const res = await login(formLogin.value)
+        if (res.code === 200) {
+          user.setProfile({ access_token: res.data.access_token, client_id: res.data.client_id })
+          loading.value = false
+          uni.reLaunch({
+            url: '/pages/index/index',
+          })
+        } else {
+          uni.showToast({
+            title: res.msg,
+            duration: 2000,
+          })
+          loading.value = false
+        }
+      } catch (error) {
         loading.value = false
       }
     }
   })
-  // form.value.validate().then(async (valid: boolean) => {
-  //   console.log(valid)
-  //   // loading.value = true
-  //   // const res = await login(formData.value)
-  //   // if (res.code === 200) {
-  //   //   user.setProfile({ access_token: res.data.access_token, client_id: res.data.client_id })
-  //   //   loading.value = false
-  //   //   uni.switchTab({
-  //   //     url: '/pages/index/index',
-  //   //   })
-  //   // } else {
-  //   //   uni.showToast({
-  //   //     title: res.msg,
-  //   //     duration: 2000,
-  //   //   })
-  //   //   loading.value = false
-  //   // }
-  // })
 }
 </script>
 
@@ -74,11 +60,21 @@ const toLogin = async () => {
       <!-- <uni-forms ref="form" :modelValue="formData" :rules="rules" validate-trigger="change">
         <uni-forms-item required label="账号" name="username"> -->
       <up-form labelPosition="left" :model="formLogin" :rules="rules" ref="form">
-        <up-form-item label="账号" prop="username" borderBottom>
-          <up-input v-model="formLogin.username" placeholder="请输入手机号" class="input_border" />
+        <up-form-item prop="username" borderBottom>
+          <up-input
+            v-model="formLogin.username"
+            placeholder="请输入手机号"
+            border="surround"
+            class="input_border"
+          />
         </up-form-item>
-        <up-form-item label="密码" prop="password" borderBottom>
-          <up-input v-model="formLogin.password" placeholder="请输入手机号" class="input_border" />
+        <up-form-item prop="password" borderBottom>
+          <up-input
+            v-model="formLogin.password"
+            placeholder="请输入密码"
+            border="surround"
+            class="input_border"
+          />
         </up-form-item>
       </up-form>
       <!-- </uni-forms-item>
@@ -92,8 +88,12 @@ const toLogin = async () => {
 </template>
 
 <style lang="scss" scoped>
+.login {
+  height: 100vh;
+  background: linear-gradient(270deg, #e1ecfe 0%, #ddfcff 100%);
+}
 .row_logo {
-  margin-top: 25%;
+  padding-top: 25%;
   display: flex;
   justify-content: center;
   .logo {
@@ -109,12 +109,13 @@ const toLogin = async () => {
   }
   .input_border {
     margin-top: 10rpx;
-    border-bottom: 1px solid gray;
+    background-color: #fff;
+    border-radius: 16rpx;
   }
 }
 .login_btn {
-  background-color: #38d36a;
-  width: 400rpx;
+  background-color: #428af6;
+  margin: 0 90rpx;
   font-weight: 900;
   color: white;
   border-radius: 50rpx;

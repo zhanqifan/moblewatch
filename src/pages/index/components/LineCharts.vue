@@ -1,14 +1,21 @@
 <template>
-  <view class="charts-box">
-    <qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
+  <view>
+    <view v-if="isShow" class="charts-box">
+      <qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
+    </view>
+    <view v-else>
+      <emptyBox mode="data" />
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { RealTimeHeartRate } from '@/types/home'
+import emptyBox from '@/components/emptyBox/index.vue'
 const props = defineProps<{ realHeart: RealTimeHeartRate[] }>()
+const isShow = ref(false)
 const opts = ref({
   color: [
     '#1890FF',
@@ -44,16 +51,17 @@ const opts = ref({
 const chartData = ref()
 const getServerData = () => {
   //模拟从服务器获取数据时的延时
-
+  isShow.value = props.realHeart.length !== 0 ? true : false
+  if (!isShow.value) return
   let res = {
     categories: props.realHeart.map((item) => item.time),
     series: [
       {
-        name: '最大值',
+        name: '最高心率',
         data: props.realHeart.map((item) => item.maxHeartRate),
       },
       {
-        name: '最小值',
+        name: '最低心率',
         data: props.realHeart.map((item) => item.minHeartRate),
       },
     ],
@@ -63,6 +71,12 @@ const getServerData = () => {
 onMounted(() => {
   getServerData()
 })
+watch(
+  () => props.realHeart,
+  () => {
+    getServerData()
+  },
+)
 </script>
 
 <style lang="scss" scoped>

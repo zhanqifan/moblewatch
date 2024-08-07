@@ -9,12 +9,12 @@
       "@vant/weapp/*": ["path/to/node_modules/@vant/weapp/dist/*"]
     },
     "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types","uview-plus/types"]
+    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types","uview-plus/types","vite/client", "vue", "unplugin-auto-import/types"]
   },
 
   "vueCompilerOptions": {
     // experimentalRuntimeMode 已废弃，现调整为 nativeTags，请升级 Volar 插件至最新版本
     "nativeTags": ["block", "component", "template", "slot"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", ".env.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", ".env.ts","types/auto-imports"]
 }

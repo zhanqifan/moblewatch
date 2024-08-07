@@ -65,7 +65,7 @@ export const request = <T>(option: UniApp.RequestOptions) => {
           })
           reject(result)
           uni.showToast({
-            title: '请求错误',
+            title: '登录过期',
             icon: 'none',
             mask: true,
           })

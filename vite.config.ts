@@ -16,9 +16,11 @@ export default defineConfig({
     AutoImport({
       imports: [
         // 预设
+        'pinia',
         'vue',
         'uni-app',
       ],
+      dts: 'src/types/auto-imports.d.ts', // 自动生成 TypeScript 类型声明文件
     }),
   ],
 })

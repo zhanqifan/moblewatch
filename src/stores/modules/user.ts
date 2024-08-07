@@ -28,6 +28,9 @@ export const useMemberStore = defineStore(
     // 清理会员信息，退出时使用
     const clearProfile = () => {
       profile.value = undefined
+      uni.reLaunch({
+        url: '/pages/login/login',
+      })
     }
 
     // 记得 return

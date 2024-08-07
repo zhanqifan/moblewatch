@@ -1,7 +1,8 @@
 // 心率传参
 export interface HeartParams {
-  startTime: number
-  endTime: number
+  type: string
+  startTime: string
+  endTime: string
 }
 // 实时心率分布图 响应体
 export interface HeartData {
@@ -19,6 +20,6 @@ export interface RealTimeHeartRate {
 
 // 心率分部图
 export interface HeartMap {
-  grade: 'LOW' | 'MIDDLE' | 'HIGH' | 'HIGHER' | 'HIGHEST' | 'HIGHEST_HIGHER';
-  time?: number;
+  grade: 'LOW' | 'MIDDLE' | 'HIGH' | 'HIGHER' | 'HIGHEST' | 'HIGHEST_HIGHER'
+  time?: number
 }

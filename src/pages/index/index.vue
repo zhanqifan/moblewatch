@@ -1,45 +1,68 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import dayjs from 'dayjs'
 import { onMounted } from 'vue'
 import { getChildHearts, getDistribution } from '@/api/heart'
 import LineCharts from './components/LineCharts.vue'
-import type { HeartData, HeartParams, HeartMap } from '@/types/home'
-import BarCharts from './components/BarCHarts.vue'
+import type { HeartData, HeartMap } from '@/types/home'
+import heartMapVue from './components/heartMap.vue'
 import { customOrder, categorySort } from './utils/sort'
-
+import { getWeekRange, getDayOfWeek } from './utils/timeControl'
+import skeleton from './components/skeleton/skeleton.vue'
+const isShow = ref(false)
 const list = ref(['日', '周', '月'])
-const timeUnix = ref({
-  日: 864000,
-  周: 604800,
-})
+const currentExchange = reactive(['day', 'week', 'month']) //传参类型
+const current = ref<number>(0) // 默认选中日
 const heartObject = ref<HeartData>() //实时心率
 const heartMap = ref<HeartMap[]>() //心率分布
-const heartParams = ref<HeartParams>({ startTime: 1722816000, endTime: 1722902400 })
-const date = ref(dayjs().format('MM月DD日'))
-// const bindDateChange = (e: UniHelper.DatePickerOnChangeEvent, extraParam: string) => {
-//   selectType.value = extraParam
-//   date.value = e.detail.value
-// }
-const getMonth = (time: Date | string, type: 'add' | 'sub') => {
-  if (type === 'add') {
-    dayjs('time').add(1, 'month')
+const formatArray = ['HH时', '周', 'M月D日'] //返回不同格式轴名映射到uchart
+const date = ref(dayjs()) //时间 默认当天
+// 默认选中日
+const heartParams = ref<{ startTime: string; endTime: string }>({
+  startTime: date.value.startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+  endTime: date.value.endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+})
+// 日月年 时间切换 传参使用
+const updateHeartParams = () => {
+  let startTime: string, endTime: string
+  if (current.value === 0) {
+    startTime = date.value.startOf('day').format('YYYY-MM-DD HH:mm:ss')
+    endTime = date.value.endOf('day').format('YYYY-MM-DD HH:mm:ss')
+  } else if (current.value === 1) {
+    startTime = date.value.startOf('isoWeek').format('YYYY-MM-DD HH:mm:ss')
+    endTime = date.value.endOf('isoWeek').format('YYYY-MM-DD HH:mm:ss')
   } else {
-    dayjs('time').subtract(1, 'month')
+    startTime = date.value.startOf('month').format('YYYY-MM-DD HH:mm:ss')
+    endTime = date.value.endOf('month').format('YYYY-MM-DD HH:mm:ss')
   }
+
+  heartParams.value = { startTime, endTime }
+}
+// 日期计算函数
+type unitType = 'day' | 'week' | 'month'
+const adjustDate = (type: 'add' | 'subtract', unit: unitType) => {
+  date.value = dayjs(date.value)[type](1, unit) //dayjs处理 日 周 月的加减
+  updateHeartParams()
+  getHeartRange()
+  getHeartCondition()
 }
 // 获取实时心率图
 const getHeartRange = async () => {
-  const res = await getChildHearts(heartParams.value)
-  res.data.realTimeHeartRate.forEach((item) => (item.time = dayjs(item.time).format('HH时')))
+  const res = await getChildHearts({ type: currentExchange[current.value], ...heartParams.value })
+  if (current.value !== 1) {
+    res.data.realTimeHeartRate.forEach(
+      (item) => (item.time = dayjs(item.time).format(formatArray[current.value])),
+    )
+  } else {
+    res.data.realTimeHeartRate.forEach((item) => (item.time = getDayOfWeek(item.time)))
+  }
   heartObject.value = res.data
+  console.log(heartObject.value)
 }
 
-const add = () => {}
-const reduce = () => {}
 // 获取心率分布图
 const getHeartCondition = async () => {
-  const res = await getDistribution(heartParams.value)
+  const res = await getDistribution({ type: currentExchange[current.value], ...heartParams.value })
   customOrder.forEach((grade) => {
     const found = res.data.some((item) => item.grade === grade)
     if (!found) {
@@ -51,51 +74,107 @@ const getHeartCondition = async () => {
   })
   heartMap.value = categorySort(res.data, 'grade', customOrder)
 }
-onMounted(() => {
+// 改变时间展示
+const computedMessage = computed(() => {
+  switch (current.value) {
+    case 0:
+      return dayjs(date.value).format('MM月DD日')
+    case 1: {
+      const { currentWeek } = getWeekRange(date.value)
+      console.log(currentWeek)
+      return currentWeek.start + '至' + currentWeek.end
+    }
+    case 2:
+      return dayjs(date.value).format('M月')
+    default:
+      return '请选择日期'
+  }
+})
+// 新增计算属性
+// const isFutureDisabled = computed(() => {
+//   const today = dayjs()
+//   switch (current.value) {
+//     case 0:
+//       return date.value.isSameOrAfter(today, 'day')
+//     case 1: {
+//       return date.value.isSameOrAfter(today, 'week')
+//     }
+//     case 2:
+//       return date.value.isSameOrAfter(today, 'month')
+//     default:
+//       return false
+//   }
+// })
+
+// 切换日周月 请求刷新数据
+const changeCurrent = (e: number) => {
+  current.value = e
+  date.value = dayjs() //切换初始化日期
+  updateHeartParams()
   getHeartRange()
   getHeartCondition()
+}
+onMounted(() => {
+  isShow.value = false
+  console.log(date.value)
+  updateHeartParams()
+  getHeartRange()
+  getHeartCondition()
+  isShow.value = true
 })
 </script>
 
 <template>
-  <view class="index">
-    <!-- 分段器 -->
-    <view class="top">
-      <up-subsection :list="list" :current="1"></up-subsection>
-    </view>
+  <view>
+    <view class="index" v-if="isShow">
+      <!-- 分段器 -->
+      <view class="top">
+        <up-subsection :list="list" :current="current" @change="changeCurrent"></up-subsection>
+      </view>
 
-    <view class="date_title">
-      <up-icon name="arrow-left" color="#909399" size="28" @click="reduce"></up-icon> {{ date }}
-      <up-icon name="arrow-right" color="#909399" size="28" @click="add"></up-icon>
-    </view>
-    <!-- <view class="example-body">
-      <uni-datetime-picker v-model="datetimerange" type="datetimerange" rangeSeparator="至" />
-    </view>
-    <uni-section :title="'时间:' + datetimerange[0]" type="line"></uni-section> -->
-    <view class="heart_row">
-      <view class="row_block">
-        <view>心率范围(次/分)</view>
-        <view class="rate">{{ heartObject?.minHeartRate }}-{{ heartObject?.maxHeartRate }}</view>
+      <view class="date_title">
+        <up-icon
+          name="arrow-left"
+          color="#909399"
+          size="28"
+          @click="adjustDate('subtract', currentExchange[current] as unitType)"
+        ></up-icon>
+        {{ computedMessage }}
+        <up-icon
+          name="arrow-right"
+          color="#909399"
+          size="28"
+          @click="adjustDate('add', currentExchange[current] as unitType)"
+        ></up-icon>
       </view>
-      <view class="row_block">
-        <view>平均心率(次/分)</view>
-        <view class="rate">{{ heartObject?.avgHeartRate.toFixed(2) }}</view>
+
+      <view class="heart_row">
+        <view class="row_block">
+          <view>心率范围(次/分)</view>
+          <view class="rate">{{ heartObject?.minHeartRate }}-{{ heartObject?.maxHeartRate }}</view>
+        </view>
+        <view class="row_block">
+          <view>平均心率(次/分)</view>
+          <view class="rate">{{ heartObject?.avgHeartRate.toFixed(2) }}</view>
+        </view>
+        <view class="row_block">
+          <view>最高心率(次/分)</view>
+          <view class="rate">{{ heartObject?.maxHeartRate }}</view>
+        </view>
       </view>
-      <view class="row_block">
-        <view>最高心率(次/分)</view>
-        <view class="rate">{{ heartObject?.minHeartRate }}</view>
+      <view style="margin-top: 20rpx">
+        <view style="font-size: 20rpx; color: gray; margin-left: 30rpx">心率历程(次/分)</view>
+        <LineCharts v-if="heartObject" :realHeart="heartObject?.realTimeHeartRate" />
       </view>
-    </view>
-    <view style="margin-top: 20rpx">
-      <view style="font-size: 20rpx; color: gray; margin-left: 30rpx">实时心率(次/分)</view>
-      <LineCharts v-if="heartObject" :realHeart="heartObject?.realTimeHeartRate" />
-    </view>
-    <view>
-      <view>心率分布</view>
       <view>
-        <BarCharts v-if="heartMap" :heartMap="heartMap" />
+        <view style="font-weight: 500; color: #c4c1c1">心率分布</view>
+        <view>
+          <heartMapVue v-if="heartMap" :heartMap="heartMap" />
+          <!-- <BarCharts v-if="heartMap" :heartMap="heartMap" /> -->
+        </view>
       </view>
     </view>
+    <view v-else><skeleton /></view>
   </view>
 </template>
 
