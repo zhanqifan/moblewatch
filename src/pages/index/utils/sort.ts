@@ -10,6 +10,7 @@ export const customOrder = [
   'HIGHEST_HIGHEST_HIGHER',
   'HIGHEST_HIGHEST_HIGHEST',
 ] //排序规则
+
 // 转换字典
 export const exchangeHeart = {
   LOW: { num: '<86次/分', name: '放松身体' },
@@ -51,8 +52,8 @@ export const categorySort = (arr: HeartMap[], key: key, customOrder: CustomOrder
     }
 
     // 按默认规则排序
-    if (a[key] > b[key]) return 1
-    if (a[key] < b[key]) return -1
+    if (a[key]! > b[key]!) return 1
+    if (a[key]! < b[key]!) return -1
     return 0
   })
 }

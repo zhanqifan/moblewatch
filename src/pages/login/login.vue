@@ -77,11 +77,6 @@ const toLogin = async () => {
           />
         </up-form-item>
       </up-form>
-      <!-- </uni-forms-item>
-        <uni-forms-item required label="密码" name="password">
-          <input v-model="formData.password" placeholder="请输入密码" class="input_border" />
-        </uni-forms-item>
-      </uni-forms> -->
     </view>
     <button class="login_btn" @click="toLogin" :disabled="loading" :loading="loading">登录</button>
   </view>

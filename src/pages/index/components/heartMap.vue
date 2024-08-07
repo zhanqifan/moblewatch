@@ -7,7 +7,15 @@ const props = defineProps<{
   heartMap: HeartMap[]
 }>()
 const maxNum = ref()
-const heartList = ref()
+
+const heartList = ref<
+  {
+    percentage: number
+    time: string
+    grade: string
+    num: string
+  }[]
+>()
 // 取最大值 作为100%
 const getMax = (arr: HeartMap[]) => {
   isShow.value = arr.some((item) => item.time! > 0)
@@ -41,7 +49,7 @@ watch(
 <template>
   <view>
     <view v-if="isShow">
-      <view class="row" v-for="item in heartList">
+      <view class="row" v-for="item in heartList" :key="item.grade">
         <view class="row_status">
           <view>{{ item.grade }}</view>
           <view class="num">{{ item.num }}</view>

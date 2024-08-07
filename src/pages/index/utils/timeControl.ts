@@ -12,8 +12,8 @@ dayjs.extend(isoWeek)
 export const getWeekRange = (date: Dayjs) => {
   const dayjsDate = dayjs(date)
   //   // 获取当前周的起始和结束日期
-  const currentWeekStart = dayjsDate.startOf('isoWeek')
-  const currentWeekEnd = dayjsDate.endOf('isoWeek')
+  const currentWeekStart = dayjsDate.startOf('isoWeek') //所在周的周一
+  const currentWeekEnd = dayjsDate.endOf('isoWeek') //所在周的周天
 
   return {
     currentWeek: {

@@ -10,9 +10,11 @@ defineProps({
   },
   size: {
     type: Object,
-    default: {
-      width: 160,
-      height: 160,
+    default: () => {
+      return {
+        width: 160,
+        height: 160,
+      }
     },
   },
   show: {
