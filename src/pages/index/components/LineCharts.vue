@@ -1,7 +1,13 @@
 <template>
   <view>
     <view v-if="isShow" class="charts-box">
-      <qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
+      <qiun-data-charts
+        type="line"
+        :opts="opts"
+        :ontouch="true"
+        :canvas2d="true"
+        :chartData="chartData"
+      />
     </view>
     <view v-else>
       <emptyBox mode="data" />
@@ -34,7 +40,7 @@ const opts = ref({
   xAxis: {
     disableGrid: true,
     scrollShow: true,
-    itemCount: 4,
+    itemCount: 8,
   },
   yAxis: {
     gridType: 'dash',
@@ -83,6 +89,5 @@ watch(
 .charts-box {
   width: 100%;
   height: 500rpx;
-  overflow-y: scroll;
 }
 </style>

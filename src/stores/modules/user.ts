@@ -6,7 +6,14 @@ export const useMemberStore = defineStore(
   'member',
   () => {
     // 会员信息
-    const profile = ref<any>()
+    const profile = ref<{
+      access_token: string
+      client_id: string
+      nickName: string
+      roles: string
+      userId: string
+      userName: string
+    }>()
 
     // 保存会员信息，登录时使用
     const setProfile = (val: any) => {
@@ -15,16 +22,16 @@ export const useMemberStore = defineStore(
     }
     // 获取个人信息
     const getUser = async () => {
-      const {
-        data: { user },
-      } = await getUserInfo()
-      const data = {
-        userId: user.userId,
-        userName: user.userName,
-        nickName: user.nickName,
+      const { data } = await getUserInfo()
+      const userData = {
+        roles: data.roles[0] ? data.roles[0] : 'common',
+        userId: data.user.userId,
+        userName: data.user.userName,
+        nickName: data.user.nickName,
       }
-      profile.value = { ...profile.value, ...data }
+      profile.value = { ...profile.value, ...userData }
     }
+
     // 清理会员信息，退出时使用
     const clearProfile = () => {
       profile.value = undefined

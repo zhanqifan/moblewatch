@@ -8,6 +8,17 @@ const props = defineProps<{
 }>()
 const maxNum = ref()
 const heartList = ref()
+const color = [
+  '#ef2591',
+  '#7b3d00',
+  '#185782',
+  '#19be6b',
+  '#2979ff',
+  '#ff9900',
+  '#fa3534',
+  '#f0f000',
+  '#4c0079',
+]
 // 取最大值 作为100%
 const getMax = (arr: HeartMap[]) => {
   isShow.value = arr.some((item) => item.time! > 0)
@@ -41,7 +52,7 @@ watch(
 <template>
   <view>
     <view v-if="isShow">
-      <view class="row" v-for="item in heartList">
+      <view class="row" v-for="(item, index) in heartList" :key="item.grade">
         <view class="row_status">
           <view>{{ item.grade }}</view>
           <view class="num">{{ item.num }}</view>
@@ -49,7 +60,7 @@ watch(
         <view class="row_time">
           <up-line-progress
             :percentage="item.percentage"
-            activeColor="#6ad3be"
+            :activeColor="color[index]"
             :showText="false"
           ></up-line-progress>
           <view class="time">{{ item.time }}</view>

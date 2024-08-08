@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs'
 import isoWeek from 'dayjs/plugin/isoWeek'
-
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 // // 使用 ISO week 插件，确保星期一是每周的第一天
 // dayjs.extend(isoWeek)
 dayjs.extend(isoWeek)
@@ -34,4 +34,7 @@ export const getDayOfWeek = (date: string) => {
   const daysOfWeek = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 
   return daysOfWeek[dayOfWeek]
+}
+export const isSameTime = (date: string) => {
+  dayjs.extend(isSameOrAfter)
 }
