@@ -2,10 +2,13 @@
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 
 onLaunch(() => {
+  uni.hideTabBar()
   console.log('App Launch')
 })
 onShow(() => {
-  console.log('App Show')
+  //⭐隐藏pages.json里配置的导航栏，使用封装的tabbar组件
+  uni.hideTabBar()
+  // console.log('App Show')
 })
 onHide(() => {
   console.log('App Hide')

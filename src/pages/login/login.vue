@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { login } from '@/api/login'
 import { useMemberStore } from '@/stores'
-import { ref } from 'vue'
 
 const user = useMemberStore()
 const formLogin = ref({
@@ -29,11 +28,11 @@ const toLogin = async () => {
       try {
         const res = await login(formLogin.value)
         if (res.code === 200) {
-          user.setProfile({ access_token: res.data.access_token, client_id: res.data.client_id })
-          loading.value = false
-          uni.reLaunch({
-            url: '/pages/index/index',
+          user.setProfile({
+            access_token: res.data.access_token,
+            client_id: res.data.client_id,
           })
+          loading.value = false
         } else {
           uni.showToast({
             title: res.msg,
@@ -59,7 +58,7 @@ const toLogin = async () => {
       <view style="margin-bottom: 30rpx">您好,欢迎来到智慧体育系统!</view>
       <!-- <uni-forms ref="form" :modelValue="formData" :rules="rules" validate-trigger="change">
         <uni-forms-item required label="账号" name="username"> -->
-      <up-form labelPosition="left" :model="formLogin" :rules="rules" ref="form">
+      <up-form labelPosition="left" :model="formLogin" :rules="rules" ref="form" labelWidth="0">
         <up-form-item prop="username" borderBottom>
           <up-input
             v-model="formLogin.username"

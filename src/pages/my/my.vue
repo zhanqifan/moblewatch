@@ -18,7 +18,7 @@ const memberStore = useMemberStore()
     <view class="base">基础信息</view>
     <view class="msg">
       <text>昵称</text>
-      <text style="color: #c4c1c1">{{ memberStore.profile.nickName }}</text>
+      <text style="color: #c4c1c1">{{ memberStore.profile?.nickName }}</text>
     </view>
     <up-divider text=""></up-divider>
     <view class="msg">
@@ -29,6 +29,7 @@ const memberStore = useMemberStore()
     <button @tap="memberStore.clearProfile()" style="float: right" size="mini" plain type="warn">
       退出登录
     </button>
+    <tabBar :selected="1" />
   </view>
 </template>
 

@@ -1,5 +1,5 @@
 import { request } from '@/utils/http'
-import type { LoginData, LoginResult } from '@/types/login'
+import type { LoginData, LoginResult, UserInfo } from '@/types/login'
 const clientId = import.meta.env.VITE_APP_CLIENT_ID
 // 登录
 export function login(data: LoginData) {
@@ -20,7 +20,7 @@ export function login(data: LoginData) {
 }
 // 获取个人信息
 export const getUserInfo = () => {
-  return request({
+  return request<UserInfo>({
     url: '/system/user/getInfo',
     method: 'GET',
   })

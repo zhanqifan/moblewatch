@@ -6,7 +6,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@vant/weapp/*": ["path/to/node_modules/@vant/weapp/dist/*"]
     },
     "lib": ["esnext", "dom"],
     "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types","uview-plus/types","vite/client", "vue", "unplugin-auto-import/types"]
@@ -16,5 +15,5 @@
     // experimentalRuntimeMode 已废弃，现调整为 nativeTags，请升级 Volar 插件至最新版本
     "nativeTags": ["block", "component", "template", "slot"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", ".env.ts","types/auto-imports"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue","types/auto-imports"]
 }
