@@ -27,7 +27,7 @@
     {
 			"path": "pages/watch/watch",
 			"style": {
-				"navigationBarTitleText": "手环"
+				"navigationBarTitleText": "首页"
 			}
 		},
 
@@ -52,22 +52,16 @@
 		"borderStyle": "white",
 		"list": [
 			{
-				"text": "首页",
-				"pagePath": "pages/index/index",
-				"iconPath": "static/tabs/home_default.png",
-				"selectedIconPath": "static/tabs/home_selected.png"
+				"pagePath": "pages/index/index"
+
 			},
       {
-        "text": "手环",
-        "pagePath": "pages/watch/watch",
-        "iconPath": "static/tabs/category_default.png",
-				"selectedIconPath": "static/tabs/category_selected.png"
+        "pagePath": "pages/watch/watch"
+
       },
 			{
-				"text": "我的",
-				"pagePath": "pages/my/my",
-				"iconPath": "static/tabs/user_default.png",
-				"selectedIconPath": "static/tabs/user_selected.png"
+				"pagePath": "pages/my/my"
+
 			}
 		]
 	}

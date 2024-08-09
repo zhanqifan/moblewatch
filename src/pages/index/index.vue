@@ -89,6 +89,21 @@ const computedMessage = computed(() => {
       return '请选择日期'
   }
 })
+// 新增计算属性
+// const isFutureDisabled = computed(() => {
+//   const today = dayjs()
+//   switch (current.value) {
+//     case 0:
+//       return date.value.isSameOrAfter(today, 'day')
+//     case 1: {
+//       return date.value.isSameOrAfter(today, 'week')
+//     }
+//     case 2:
+//       return date.value.isSameOrAfter(today, 'month')
+//     default:
+//       return false
+//   }
+// })
 
 // 切换日周月 请求刷新数据
 const changeCurrent = (e: number) => {
