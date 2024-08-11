@@ -2,6 +2,17 @@
 import { useMemberStore } from '@/stores'
 
 const memberStore = useMemberStore()
+const lintToken = () => {
+  const token = memberStore.profile?.access_token
+  if (!token) {
+    uni.reLaunch({
+      url: '/pages/login/login',
+    })
+  }
+}
+onMounted(() => {
+  lintToken()
+})
 </script>
 
 <template>
