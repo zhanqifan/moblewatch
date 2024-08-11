@@ -59,8 +59,7 @@
     "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
     "pinia": "2.0.27",
-    "pinia-plugin-persistedstate": "^3.2.0",
-    "unplugin-auto-import": "^0.18.2",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "uview-plus": "^3.3.12",
     "vue": "^3.2.47",
     "vue-i18n": "^9.2.2"
@@ -75,7 +74,7 @@
     "@rushstack/eslint-patch": "^1.1.4",
     "@types/node": "^18.11.9",
     "@uni-helper/uni-app-types": "^0.5.8",
-    "@uni-helper/uni-ui-types": "^0.5.11",
+    "@uni-helper/uni-ui-types": "^0.5.15",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/runtime-core": "^3.2.45",
@@ -87,10 +86,10 @@
     "sass": "^1.77.8",
     "sass-loader": "^10.5.2",
     "typescript": "^5.1.6",
+    "unplugin-auto-import": "^0.18.2",
     "vite": "^4.4.9",
     "vue-tsc": "^1.8.8"
   },
-  "description": "小兔鲜儿项目包含从首页浏览商品，商品详情，微信登录，加入购物车，提交订单，微信支付，订单管理等功能。",
   "main": "index.js",
   "author": "",
   "license": "ISC"
