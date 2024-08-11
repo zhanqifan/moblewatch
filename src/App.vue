@@ -18,12 +18,16 @@ onHide(() => {
 <style lang="scss">
 // 字体图标
 @import 'uview-plus/theme.scss';
-// @import '@/styles/fonts.scss';
+@font-face {
+  font-family: 'test';
+  src: url('http://38.55.232.204:8087/images/Alimama.woff');
+}
 view,
 navigator,
 input,
 scroll-view {
   box-sizing: border-box;
+  font-family: test;
 }
 
 button::after {

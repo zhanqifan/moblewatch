@@ -98,7 +98,6 @@ const toLogin = async () => {
 .login_form {
   padding: 50rpx 70rpx;
   .login_text {
-    font-weight: 900;
     font-size: 60rpx;
   }
   .input_border {
@@ -110,7 +109,6 @@ const toLogin = async () => {
 .login_btn {
   background-color: #428af6;
   margin: 0 90rpx;
-  font-weight: 900;
   color: white;
   border-radius: 50rpx;
 }

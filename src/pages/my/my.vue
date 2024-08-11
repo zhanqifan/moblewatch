@@ -36,6 +36,7 @@ const memberStore = useMemberStore()
 <style lang="scss">
 .my {
   padding: 0 40rpx;
+  height: 100vh;
   .base {
     margin-top: 20rpx;
   }

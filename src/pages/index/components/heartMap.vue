@@ -82,9 +82,7 @@ watch(
   .row_status {
     width: 150rpx;
     font-size: 25rpx;
-    font-weight: 900;
     .num {
-      font-weight: 300;
       font-size: 22rpx;
       color: #c4c1c1;
     }

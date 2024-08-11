@@ -16,6 +16,7 @@ const switchTabs = (item: routerType) => {
   })
 }
 </script>
+
 <template>
   <up-tabbar
     :value="selected"
@@ -33,5 +34,8 @@ const switchTabs = (item: routerType) => {
     ></up-tabbar-item>
   </up-tabbar>
 </template>
-
-<style lang="scss" scoped></style>
+<style>
+::v-deep u-tabbar {
+  border: 1px solid black;
+}
+</style>

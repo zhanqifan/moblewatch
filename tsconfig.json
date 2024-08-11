@@ -8,7 +8,7 @@
       "@/*": ["./src/*"],
     },
     "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types","uview-plus/types","vite/client", "vue", "unplugin-auto-import/types"]
+    "types": ["@dcloudio/types", "miniprogram-api-typings", "@uni-helper/uni-app-types","uview-plus/types","vite/client", "vue", "unplugin-auto-import/types","image-tools"]
   },
 
   "vueCompilerOptions": {

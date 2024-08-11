@@ -171,7 +171,7 @@ onMounted(() => {
         <LineCharts v-if="heartObject" :realHeart="heartObject?.realTimeHeartRate" />
       </view>
       <view>
-        <view style="font-weight: 500; color: #c4c1c1">心率分布</view>
+        <view style="color: #c4c1c1">心率分布</view>
         <view>
           <heartMapVue v-if="heartMap" :heartMap="heartMap" />
           <!-- <BarCharts v-if="heartMap" :heartMap="heartMap" /> -->
@@ -200,7 +200,6 @@ onMounted(() => {
     height: 85%;
     border-radius: 10rpx;
     color: black;
-    font-weight: 700;
     box-shadow: 0rpx 0rpx 8rpx 0rpx rgba(0, 0, 0, 0.1);
     background-color: #fff;
   }
@@ -213,7 +212,6 @@ onMounted(() => {
     justify-content: space-between;
     text-align: center;
     font-size: 40rpx;
-    font-weight: 500;
   }
   .heart_row {
     margin-top: 60rpx;
@@ -222,7 +220,6 @@ onMounted(() => {
     justify-content: space-around;
     .rate {
       font-size: 40rpx;
-      font-weight: 900;
       margin-top: 20rpx;
     }
   }
