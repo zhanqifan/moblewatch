@@ -48,13 +48,13 @@ const backImg = ref()
           <view class="switch_btn">
             <image
               v-show="control"
-              src="http://38.55.232.204:8087/images/start.png"
+              src="https://blt.yukexx.com/images/start.png"
               mode="scaleToFill"
               @click="start"
             />
             <image
               v-show="!control"
-              src="http://38.55.232.204:8087/images/stop.png"
+              src="https://blt.yukexx.com/images/stop.png"
               mode="scaleToFill"
               @click="end"
             />
@@ -128,7 +128,7 @@ const backImg = ref()
     height: 254rpx;
     color: #f7f8fa;
     padding: 32rpx;
-    background-image: url('http://38.55.232.204:8087/images/man.png');
+    background-image: url('https://blt.yukexx.com/images/man.png');
     background-position: -20rpx center;
     background-size: cover; /* 图片缩放至覆盖整个背景区域，可能会裁剪图片 */
 
