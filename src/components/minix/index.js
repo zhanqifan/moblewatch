@@ -3,7 +3,7 @@ let mixin = {
     return {
       title: '智慧体育',
       imgUrl: 'https://blt.yukexx.com/images/stu.png',
-      path: '/pages/index/index',
+      path: '/pages/my/my',
     }
   },
   created() {
