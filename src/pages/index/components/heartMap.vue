@@ -23,12 +23,13 @@ const color = [
 const getMax = (arr: HeartMap[]) => {
   isShow.value = arr.some((item) => item.time! > 0)
   if (!isShow) return
-  maxNum.value = arr.reduce((max, item) => (item.time! > max.time! ? item : max), arr[0])
+  maxNum.value = arr.reduce((cur, item) => item.time! + cur, 0)
+  console.log(maxNum.value)
   computeNum()
 }
 // 格式转换 百分比数值计算
 const computeNum = () => {
-  const { time } = maxNum.value
+  const time = maxNum.value
   heartList.value = props.heartMap.map((item) => ({
     percentage: (item.time! / time) * 100,
     time: formatSecondsToHMS(item.time!),
@@ -45,7 +46,6 @@ watch(
   () => props.heartMap,
   () => {
     getMax(props.heartMap)
-    console.log(heartList.value)
   },
 )
 </script>

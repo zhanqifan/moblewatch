@@ -14,7 +14,7 @@ const currentExchange = reactive(['day', 'week', 'month']) //传参类型
 const current = ref<number>(0) // 默认选中日
 const heartObject = ref<HeartData>() //实时心率
 const heartMap = ref<HeartMap[]>() //心率分布
-const formatArray = ['H时', '周', 'D日'] //返回不同格式轴名映射到uchart
+const formatArray = ['H:mm', '周', 'D日'] //返回不同格式轴名映射到uchart
 const date = ref(dayjs()) //时间 默认当天
 // 默认选中日
 const heartParams = ref<{ startTime: string; endTime: string }>({

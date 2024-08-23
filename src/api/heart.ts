@@ -4,7 +4,7 @@ import { request } from '@/utils/http'
 export const getChildHearts = (data: HeartParams) => {
   return request<HeartData>({
     url: '/parentInfo/heartRate',
-    // url: 'https://apifoxmock.com/m2/3773810-3405678-default/202217385',
+    // url: 'https://apifoxmock.com/m2/3773810-3405678-default/205794622',
     method: 'GET',
     data,
     header: {

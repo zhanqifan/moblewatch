@@ -34,13 +34,14 @@ const opts = ref({
     '#9A60B4',
     '#ea7ccc',
   ],
+  dataLabel: false,
   padding: [15, 10, 0, 15],
-  enableScroll: true,
+  // enableScroll: true,
   legend: {},
   xAxis: {
     disableGrid: true,
-    scrollShow: true,
-    itemCount: 8,
+    // scrollShow: true,
+    labelCount: 7,
   },
   yAxis: {
     gridType: 'dash',
@@ -60,11 +61,11 @@ const getServerData = () => {
   isShow.value = props.realHeart.length !== 0 ? true : false
   if (!isShow.value) return
   let res = {
-    categories: props.realHeart.map((item) => item.time),
+    categories: props.realHeart.reverse().map((item) => item.time),
     series: [
       {
         name: '最高心率',
-        data: props.realHeart.map((item) => item.maxHeartRate),
+        data: props.realHeart.map((item) => item.avgHeartRate),
       },
       {
         name: '最低心率',
