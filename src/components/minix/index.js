@@ -18,6 +18,7 @@ let mixin = {
     return {
       title: this.title,
       imageUrl: this.imgUrl,
+      path: '/pages/my/my',
     }
   },
   onShareTimeline(res) {

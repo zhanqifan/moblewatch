@@ -55,7 +55,7 @@ const toLogin = async () => {
     </view>
     <view class="login_form">
       <view class="login_text">登录</view>
-      <view style="margin-bottom: 30rpx">您好,欢迎来到智慧体育系统!</view>
+      <view style="margin-bottom: 30rpx">您好,欢迎来到智慧体育小程序!</view>
       <!-- <uni-forms ref="form" :modelValue="formData" :rules="rules" validate-trigger="change">
         <uni-forms-item required label="账号" name="username"> -->
       <up-form labelPosition="left" :model="formLogin" :rules="rules" ref="form" labelWidth="0">

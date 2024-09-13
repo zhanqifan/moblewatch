@@ -16,6 +16,7 @@ export interface RealTimeHeartRate {
   time: string
   maxHeartRate: number
   minHeartRate: number
+  avgHeartRate: number
 }
 
 // 心率分部图

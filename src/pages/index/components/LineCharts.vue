@@ -23,29 +23,21 @@ import emptyBox from '@/components/emptyBox/index.vue'
 const props = defineProps<{ realHeart: RealTimeHeartRate[] }>()
 const isShow = ref(false)
 const opts = ref({
-  color: [
-    '#1890FF',
-    '#91CB74',
-    '#FAC858',
-    '#EE6666',
-    '#73C0DE',
-    '#3CA272',
-    '#FC8452',
-    '#9A60B4',
-    '#ea7ccc',
-  ],
+  color: ['#1890FF', '#91CB74', '#FAC858', '#EE6666', '#73C0DE', '#3CA272', '#FC8452'],
   dataLabel: false,
-  padding: [15, 10, 0, 15],
+  padding: [15, 15, 0, 0],
   // enableScroll: true,
   legend: {},
   xAxis: {
     disableGrid: true,
     // scrollShow: true,
-    labelCount: 7,
+    labelCount: 5,
+    fontSize: 12,
   },
   yAxis: {
     gridType: 'dash',
     dashLength: 2,
+    position: 'center',
   },
   extra: {
     line: {
@@ -64,13 +56,13 @@ const getServerData = () => {
     categories: props.realHeart.reverse().map((item) => item.time),
     series: [
       {
-        name: '最高心率',
+        name: '平均心率',
         data: props.realHeart.map((item) => item.avgHeartRate),
       },
-      {
-        name: '最低心率',
-        data: props.realHeart.map((item) => item.minHeartRate),
-      },
+      // {
+      //   name: '最低心率',
+      //   data: props.realHeart.map((item) => item.minHeartRate),
+      // },
     ],
   }
   chartData.value = res
@@ -89,6 +81,6 @@ watch(
 <style lang="scss" scoped>
 .charts-box {
   width: 100%;
-  height: 500rpx;
+  height: 100%;
 }
 </style>

@@ -48,12 +48,11 @@ const adjustDate = (type: 'add' | 'subtract', unit: unitType) => {
 // 获取实时心率图
 const getHeartRange = async () => {
   const res = await getChildHearts({ type: currentExchange[current.value], ...heartParams.value })
+  const data = res.data.realTimeHeartRate.reverse()
   if (current.value !== 1) {
-    res.data.realTimeHeartRate.forEach(
-      (item) => (item.time = dayjs(item.time).format(formatArray[current.value])),
-    )
+    data.forEach((item) => (item.time = dayjs(item.time).format(formatArray[current.value])))
   } else {
-    res.data.realTimeHeartRate.forEach((item) => (item.time = getDayOfWeek(item.time)))
+    data.forEach((item) => (item.time = getDayOfWeek(item.time)))
   }
   heartObject.value = res.data
   console.log(heartObject.value)
